@@ -5,19 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
-    - name: Installing PHP
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.3
-        extension-csv: mbstring, xdebug #optional
-        ini-values-csv: "post_max_size=256M, short_open_tag=On" #optional
-    - name: Check PHP Version
-      run: php -v
-    - name: Check Composer Version
-      run: composer -V
-    - name: Check PHP Extensions
-      run: php -m
+          php-version: 8.1
+
+    - name: Install Composer dependencies
+      run: composer install
+
+    - name: Build the application
+      run: make
+
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
