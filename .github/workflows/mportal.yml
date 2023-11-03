@@ -1,28 +1,25 @@
 name: PHP
-
 on: [push]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
-- name: Checkout
-  uses: actions/checkout@master
-- name: Installing PHP
-  uses: shivammathur/setup-php@master
-  with:
-    php-version: 7.3
-    extension-csv: mbstring, xdebug #optional
-    ini-values-csv: "post_max_size=256M, short_open_tag=On" #optional
-- name: Check PHP Version
-  run: php -v
-- name: Check Composer Version
-  run: composer -V
-- name: Check PHP Extensions
-  run: php -m
-- name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Installing PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.3
+        extension-csv: mbstring, xdebug #optional
+        ini-values-csv: "post_max_size=256M, short_open_tag=On" #optional
+    - name: Check PHP Version
+      run: php -v
+    - name: Check Composer Version
+      run: composer -V
+    - name: Check PHP Extensions
+      run: php -m
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
