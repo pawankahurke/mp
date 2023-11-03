@@ -1,0 +1,51 @@
+# FROM 059920143366.dkr.ecr.us-east-1.amazonaws.com/php74-image:ubuntu4583
+FROM 059920143366.dkr.ecr.us-east-1.amazonaws.com/php8-image:ubuntu8061
+
+# RUN pecl install xdebug
+# RUN docker-php-ext-enable xdebug v
+
+COPY ./Dashboard /var/www/html/Dashboard
+COPY build/start.sh /app/start.sh
+COPY build/replace-env.sh /app/replace-env.sh
+COPY build/index.php /var/www/html/index.php
+COPY cicd.php /var/www/html/cicd.php
+
+ARG channel=no
+ARG CI_COMMIT_BRANCH=no
+ARG CI_PIPELINE_ID=1
+
+ENV channel=${channel}
+ENV CI_COMMIT_BRANCH=${CI_COMMIT_BRANCH}
+ENV CI_PIPELINE_ID=${CI_PIPELINE_ID}
+
+ENV mportal_php_fpm_max_children=20
+
+
+ENV MODSECURITY=on
+
+COPY build/ngnix/default-localdev.conf /etc/nginx/nginx.conf
+COPY build/php-fpm/www.conf /etc/php-fpm.d/www.conf
+COPY build/modsec /etc/nginx/modsec
+
+RUN mkdir /var/www/html/v8_main \
+    && chmod +x /app/start.sh \
+    && chmod -R 777 /var/www/html \
+    && mkdir -p /var/lib/php/session \
+    && mkdir -p /var/lib/php/wsdlcache \
+    && mkdir -p /var/lib/php/opcache
+# RUN echo "xdebug.mode=coverage" > /usr/local/etc/php/conf.d/xdebug.ini
+
+# wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+# dnf --disablerepo '*' --enablerepo=extras swap centos-linux-repos centos-stream-repos
+# dnf install mysql
+
+
+RUN  chmod +x /app/start.sh
+
+CMD /app/start.sh
+
+WORKDIR  /var/www/html
+
+RUN echo "Error 500 - mportal" > /var/www/html/50x.html
+RUN echo "Error 400 - mportal" > /var/www/html/40x.html
+RUN echo "Error 403 - mportal" > /var/www/html/error403.html

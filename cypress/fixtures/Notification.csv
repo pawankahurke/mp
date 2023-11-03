@@ -1,0 +1,3 @@
+"Name","Site","Type","Priority","Seconds","Criteria","Search Text","Where Text","Show Text","Scrip","Created","Status","","","","","","","","","","","","","",""
+"SCCM Corrupted","All","Events of Interest","P1","60","[]","","","","","03/15/2022 07:09 AM","Enabled","","","","","","","","","","","","","",""
+"SCCM Corruption Fixed","All","Events of Interest","P1","60","[]","","","","","03/15/2022 07:12 AM","Enabled","","","","","","","","","","","","","",""
