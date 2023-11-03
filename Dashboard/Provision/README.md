@@ -1,3 +1,0 @@
-# licensing
-
-slave licensing server
